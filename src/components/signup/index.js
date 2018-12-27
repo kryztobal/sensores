@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { Wrapper } from './index.styled';
 import { Form, Input } from 'antd';
-import Actions from '../../redux/Auth/actions'
+import Actions from '../../redux/Signup/actions'
 
 import { 
   Row, 
@@ -14,17 +14,17 @@ import {
   FormGroup, 
 } from 'reactstrap';
 
-const { login } = Actions
+const { signup } = Actions
 const FormItem = Form.Item
 
 class index extends Component {
-
+  
   handleSubmit(e) {
     e.preventDefault()
-    let { form: { validateFields }, login } = this.props
+    let { form: { validateFields }, signup } = this.props
 
     validateFields( (err, values) => {
-      if(!err) login(values)
+      if(!err) signup(values)
     })
   }
 
@@ -36,7 +36,7 @@ class index extends Component {
           <Row >
             <Col xs= "12" style= {{margin: '0 auto', padding:'22px', width:'100%', maxWidth:'450px'}} > 
               <div className="login" >
-                <h2 className="login__title"> Ingresa a tu cuenta </h2>
+                <h2 className="login__title"> Registro </h2>
                 <Row>
                   <Col style= {{margin: '0 auto',  padding:'22px'}}>
                     <Form onSubmit={ this.handleSubmit.bind(this) } >
@@ -51,12 +51,22 @@ class index extends Component {
                           </FormItem>
                         </FormGroup>
                         <FormGroup className="login__form">
-                          <Label for="Password" className="login__label">Contraseña</Label>
+                          <Label for="Password" className="login__label">Password</Label>
                           <FormItem>
                             {getFieldDecorator('password', {
                               rules: [{ required: true, message: '*Requerido!' }],
                             })(
                               <Input className="login__input form-control" size="large" type="password" name="password" id="Password" />
+                            )}
+                          </FormItem>
+                      </FormGroup>
+                      <FormGroup className="login__form">
+                          <Label for="Password" className="login__label">Confirmar Password</Label>
+                          <FormItem>
+                            {getFieldDecorator('confirm_password', {
+                              rules: [{ required: true, message: '*Requerido!' }],
+                            })(
+                              <Input className="login__input form-control" size="large" type="password" name="confirm_password" id="confirm_password" />
                             )}
                           </FormItem>
                       </FormGroup>
@@ -75,4 +85,4 @@ class index extends Component {
 
 const LoginForm = Form.create()(index);
 
-export default connect(null, { login })(LoginForm);
+export default connect(null, { signup })(LoginForm);
