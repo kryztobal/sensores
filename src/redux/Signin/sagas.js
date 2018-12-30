@@ -3,7 +3,6 @@ import { history } from '../store';
 import { all, takeEvery, put, fork, call } from 'redux-saga/effects';
 import { API_URL } from '../../settings/server_url';
 
-
 //import Notification from '../../components/Notification';
 // import { clearUser, getUser } from '../../helpers/utility';
 
@@ -12,21 +11,18 @@ const login = (data) =>
     method: 'GET',
     body: JSON.stringify(data),
     headers: { 
-        'content-type': 'application/x-www-form-urlencoded',
-        'cache-control': 'no-cache',
-        'Postman-Token': 'da77954a-6563-450e-b458-51c37956a00b'
+      'content-type': 'application/x-www-form-urlencoded'
     }
   }).then(response => response.json())
     .catch( error => ({ error }) )
 
+
 export function* loginRequest() {
   yield takeEvery(actions.LOGIN_REQUEST, function*(action) {
-    const response = yield call(login, action.payload)
-    console.log("debug", response)
+    const response = yield call(login)
+    console.log("debugs", response)
 
     // if(Response.status === "success" ){
-
-
     // } else {
     //   yield put({ type: actions.LOGIN_ERROR })
     //   Notification('error', `Error al iniciar sesión. ${Response.message}`)

@@ -1,1 +1,1 @@
-export const API_URL = 'http://api1.smartdots.cl:10001';
+export const API_URL = 'http://api1.smartdots.cl:1001';

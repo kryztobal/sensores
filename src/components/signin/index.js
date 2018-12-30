@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import { Wrapper } from './index.styled';
 import { Form, Input } from 'antd';
-import Actions from '../../redux/Auth/actions'
+import Actions from '../../redux/Signin/actions'
 
 import { 
   Row, 
