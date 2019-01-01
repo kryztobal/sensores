@@ -1,53 +1,47 @@
 import React, { Component } from 'react';
+import {Container} from 'reactstrap'
+
 import './App.css';
-import Chart from './data'
+import Chart from './data';
 
 import { connect } from 'react-redux';
 import Actions from '../redux/Data/actions';
 
-const { getDeviceList } = Actions
+const { getDeviceList } = Actions;
 
 class App extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      deviceList : []
-    }
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			deviceList: []
+		};
+	}
 
-  componentDidMount() {
-    const { getDeviceList } = this.props
-    getDeviceList()
-  }
+	componentDidMount() {
+		const { getDeviceList } = this.props;
+		getDeviceList();
+	}
 
-  componentWillReceiveProps(props){
-    if(props.deviceList && props.deviceList.length > 0){
-      this.setState({
-        deviceList : props.deviceList
-      })
-    }
-  }
+	componentWillReceiveProps(props) {
+		if (props.deviceList && props.deviceList.length > 0) {
+			this.setState({
+				deviceList: props.deviceList
+			});
+		}
+	}
 
-  render() {
-    const {deviceList} = this.state
-    return (
-      <div id="container">
-        {
-          deviceList.map((device, index)=>(
-            <Chart key={index} device={device}/>
-          ))
-        }
-      </div>
-    );
-  }
+	render() {
+		const { deviceList } = this.state;
+		return <Container>{deviceList.map((device, index) => <Chart key={index} device={device} />)}</Container>;
+	}
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	deviceList: state.Data.deviceList
 });
 
 // const mapDispatchToProps = (dispatch) => ({
-  // getDeviceList
+// getDeviceList
 // });
 
-export default connect(mapStateToProps, {getDeviceList})(App);
+export default connect(mapStateToProps, { getDeviceList })(App);

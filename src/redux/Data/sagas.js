@@ -19,13 +19,12 @@ export function* getDevicesListRequest() {
 	yield takeEvery(actions.GET_DEVICE_LIST, function*(action) {
 		const user = 'crojo';
     const response = yield call(getDevicesList, user);
-    yield put({ type: actions.GET_DEVICE_LIST_SUCCESS, payload:response })
-		// if(response.status === "success" ){
-    //   yield put({ type: actions.GET_DEVICE_LIST_SUCCESS, data:response.Items })
-		// } else {
-		//   yield put({ type: actions.GET_DEVICE_LIST_ERROR })
-		//   Notification('error', `Error al cargar la data. ${Response.message}`)
-		// }
+		if(response.status === "success" ){
+      yield put({ type: actions.GET_DEVICE_LIST_SUCCESS, payload:response.data })
+		} 
+		else {
+		  Notification('error', `Error al cargar la data.`)
+		}
 	});
 }
 
