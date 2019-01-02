@@ -1,5 +1,16 @@
 import React, { Component } from 'react';
-import {Container} from 'reactstrap'
+import {
+	Container,
+	Collapse,
+	Navbar,
+	NavbarToggler,
+	NavbarBrand,
+	Nav,
+	UncontrolledDropdown,
+	DropdownToggle,
+	DropdownMenu,
+	DropdownItem
+} from 'reactstrap';
 
 import './App.css';
 import Chart from './data';
@@ -13,7 +24,8 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			deviceList: []
+      deviceList: [],
+      isOpen:false
 		};
 	}
 
@@ -30,9 +42,36 @@ class App extends Component {
 		}
 	}
 
+  _hanldeOpen = ()=>{
+    this.setState({
+      isOpen: !this.state.isOpen
+    })
+  }
+
 	render() {
 		const { deviceList } = this.state;
-		return <Container>{deviceList.map((device, index) => <Chart key={index} device={device} />)}</Container>;
+		return (
+			<div>
+				<Navbar color="light" light expand="md">
+					<NavbarBrand href="/">Sensores</NavbarBrand>
+					<NavbarToggler onClick={this._hanldeOpen} />
+					<Collapse isOpen={this.state.isOpen} navbar>
+						<Nav className="ml-auto" navbar>
+							<UncontrolledDropdown nav inNavbar>
+								<DropdownToggle nav caret>
+									Opciones
+								</DropdownToggle>
+								<DropdownMenu right>
+									<DropdownItem>Sign out</DropdownItem>
+								</DropdownMenu>
+							</UncontrolledDropdown>
+						</Nav>
+					</Collapse>
+				</Navbar>
+				<br />
+				<Container>{deviceList.map((device, index) => <Chart key={index} device={device} />)}</Container>;
+			</div>
+		);
 	}
 }
 
