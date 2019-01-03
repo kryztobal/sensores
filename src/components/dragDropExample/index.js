@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import './App.css'
+import './index.css'
 
 class Drag extends Component {
     state = {

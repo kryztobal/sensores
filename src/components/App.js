@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {
 	Container,
+	Col,
+	Row,
 	Collapse,
 	Navbar,
 	NavbarToggler,
@@ -14,6 +16,7 @@ import {
 
 import './App.css';
 import Chart from './data';
+import SensorCard from './sensor-card';
 
 import { connect } from 'react-redux';
 import Actions from '../redux/Data/actions';
@@ -24,8 +27,8 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-      deviceList: [],
-      isOpen:false
+			deviceList: [],
+			isOpen: false
 		};
 	}
 
@@ -42,14 +45,20 @@ class App extends Component {
 		}
 	}
 
-  _hanldeOpen = ()=>{
-    this.setState({
-      isOpen: !this.state.isOpen
-    })
-  }
+	_hanldeOpen = () => {
+		this.setState({
+			isOpen: !this.state.isOpen
+		});
+	};
 
 	render() {
 		const { deviceList } = this.state;
+		const deviceListTest = [
+			{ deviceName: 'sensor 1', deviceOwner: 'asdasdas', deviceProvider: 'asdasdsa', deviceType: 'asdasdsa' },
+			{ deviceName: 'sensor 2', deviceOwner: 'asdasdas', deviceProvider: 'asdasdsa', deviceType: 'asdasdsa' },
+			{ deviceName: 'sensor 3', deviceOwner: 'asdasdas', deviceProvider: 'asdasdsa', deviceType: 'asdasdsa' },
+			{ deviceName: 'sensor 4', deviceOwner: 'asdasdas', deviceProvider: 'asdasdsa', deviceType: 'asdasdsa' }
+		];
 		return (
 			<div>
 				<Navbar color="light" light expand="md">
@@ -69,7 +78,36 @@ class App extends Component {
 					</Collapse>
 				</Navbar>
 				<br />
-				<Container>{deviceList.map((device, index) => <Chart key={index} device={device} />)}</Container>;
+
+				<Container style={{ margin: 0 }}>
+					<Row>
+						<Col md="4">
+							<div className="app">
+								<div className="scroller">
+									{deviceListTest.map((device, index) => <SensorCard key={index} device={device} />)}
+								</div>
+							</div>
+						</Col>
+						<Col md="8">
+							<Row>
+								<Col md="6">
+									<div className="chart-content" />
+								</Col>
+								<Col md="6">
+									<div className="chart-content" />
+								</Col>
+							</Row>
+							<Row>
+								<Col md="6">
+									<div className="chart-content" />
+								</Col>
+								<Col md="6">
+									<div className="chart-content" />
+								</Col>
+							</Row>
+						</Col>
+					</Row>
+				</Container>
 			</div>
 		);
 	}
