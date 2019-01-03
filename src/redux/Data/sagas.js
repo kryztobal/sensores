@@ -9,7 +9,8 @@ const getDevicesList = (user) =>
 		method: 'GET',
 		headers: {
 			user: `${user}`,
-			'Access-Control-Allow-Headers': '*'
+			'Access-Control-Allow-Headers': '*',
+			'token':'e178bec211fe4851e7913d8a1b367baf06a9758183241c2c3b56438a8b37c1ef82c30ff49dc44523ad8fbb19acf4eb0d218cae6bba8a96697237d64800ebb7ab'
 		}
 	})
 		.then((response) => response.json())

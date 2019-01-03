@@ -51,6 +51,16 @@ class index extends Component {
                           </FormItem>
                         </FormGroup>
                         <FormGroup className="login__form">
+                          <Label for="User" className="login__label" >User</Label>
+                          <FormItem>
+                            {getFieldDecorator('user', {
+                              rules: [{ required: true, message: '*Requerido!' }],
+                            })(
+                              <Input className="login__input form-control" size="large" type="user" name="user" id="User" />
+                            )}
+                          </FormItem>
+                        </FormGroup>
+                        <FormGroup className="login__form">
                           <Label for="Password" className="login__label">Password</Label>
                           <FormItem>
                             {getFieldDecorator('password', {

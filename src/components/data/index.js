@@ -24,7 +24,7 @@ const GraphMonnit = props => {
   });
   return (
     <LineChart
-      width={600}
+      width={400}
       height={300}
       data={data}
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -46,7 +46,6 @@ const GraphMonnit = props => {
 
 const GraphKontakt = props => {
   const data = [];
-  console.log("lectures",props.lectures)
   props.lectures.map(lecture => {
     data.push({
       timestamp: moment.unix(lecture.timestamp).format("DD MMMM hh:mm:ss"),
@@ -55,7 +54,7 @@ const GraphKontakt = props => {
   });
   return (
     <LineChart
-      width={600}
+      width={400}
       height={300}
       data={data}
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -87,63 +86,101 @@ class Chart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deviceId: this.props.device.deviceId,
+      deviceId: null,
       lectures: [],
       count: 0,
       scannedCount: 0,
-      loaded: false
+      loaded: false,
+      device:null
     };
   }
 
-  componentDidMount() {
-    fetch(`${API_URL}/devices/${this.state.deviceId}/10`, {
-      method: "GET",
-      headers: {
-        "Access-Control-Allow-Headers": "*"
-      }
-    })
-      .then(response => response.json())
-      .then(content => {
-        if (content.status === "success") {
-          this.setState({
-            lectures: content.data.Items,
-            count: content.data.Count,
-            scannedCount: content.data.ScannedCount,
-            loaded: true
-          });
-        } else {
-          this.setState({
-            loaded: false
-          });
+  componentDidMount(){
+    console.log(this.props.device)
+    if(this.props.device){
+      setInterval(()=>{
+        
+        console.log("asdasda")
+      }, 1000)
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.device) {
+      fetch(`${API_URL}/devices/${props.device.deviceId}/10`, {
+        method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers": "*",
+          token:
+            "e178bec211fe4851e7913d8a1b367baf06a9758183241c2c3b56438a8b37c1ef82c30ff49dc44523ad8fbb19acf4eb0d218cae6bba8a96697237d64800ebb7ab",
+          user: "cmunoz"
         }
-      });
+      })
+        .then(response => response.json())
+        .then(content => {
+          if (content.status === "success") {
+            this.setState({
+              lectures: content.data.Items,
+              count: content.data.Count,
+              scannedCount: content.data.ScannedCount,
+              loaded: true,
+              deviceId: props.device.deviceId
+            });
+          } else {
+            this.setState({
+              loaded: false
+            });
+          }
+        });
+    }
+  }
+
+  componentDidMount() {
+    if (this.state.deviceId) {
+    }
   }
 
   render() {
     const { device } = this.props;
     const { lectures, scannedCount, loaded } = this.state;
+    setInterval(()=>{
+      fetch(`${API_URL}/devices/${this.props.device.deviceId}/10`, {
+        method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers": "*",
+          token:
+            "e178bec211fe4851e7913d8a1b367baf06a9758183241c2c3b56438a8b37c1ef82c30ff49dc44523ad8fbb19acf4eb0d218cae6bba8a96697237d64800ebb7ab",
+          user: "cmunoz"
+        }
+      })
+        .then(response => response.json())
+        .then(content => {
+          if (content.status === "success") {
+            this.setState({
+              lectures: content.data.Items,
+              count: content.data.Count,
+              scannedCount: content.data.ScannedCount,
+              loaded: true,
+              deviceId: this.props.device.deviceId
+            });
+          } else {
+            this.setState({
+              loaded: false
+            });
+          }
+        });
+    }, 5000)
     return (
       <Row>
-        <Col md="4">
-          <Card body>
-            <CardTitle>Device name: {device.deviceName}</CardTitle>
-            <CardText>Device owner: {device.deviceOwner}</CardText>
-            <CardText>Device provider: {device.deviceProvider}</CardText>
-            <CardText>Device type: {device.deviceType}</CardText>
-            <CardText>N° Lectures: {scannedCount}</CardText>
-          </Card>
-        </Col>
-        <Col md="8">
-          {loaded ? (
-            device.deviceProvider === "kontakt" ? (
-              <GraphKontakt lectures={lectures} />
-            ) : (
-              <GraphMonnit lectures={lectures} />
-            )
+        {loaded ? (
+          device.deviceProvider === "kontakt" ? (
+            <GraphKontakt lectures={lectures} />
           ) : (
-            <Spinner />
-          )}
-        </Col>
+            <GraphMonnit lectures={lectures} />
+          )
+        ) : (
+          <Spinner />
+        )}
       </Row>
     );
   }

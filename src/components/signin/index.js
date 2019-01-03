@@ -41,12 +41,12 @@ class index extends Component {
                   <Col style= {{margin: '0 auto',  padding:'22px'}}>
                     <Form onSubmit={ this.handleSubmit.bind(this) } >
                         <FormGroup className="login__form">
-                          <Label for="Email" className="login__label" >Email</Label>
+                          <Label for="User" className="login__label" >User</Label>
                           <FormItem>
-                            {getFieldDecorator('email', {
+                            {getFieldDecorator('user', {
                               rules: [{ required: true, message: '*Requerido!' }],
                             })(
-                              <Input className="login__input form-control" size="large" type="email" name="email" id="Email" />
+                              <Input className="login__input form-control" size="large" type="text" name="user" id="User" />
                             )}
                           </FormItem>
                         </FormGroup>

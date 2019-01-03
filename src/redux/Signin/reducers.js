@@ -1,7 +1,8 @@
 import actions from './actions';
 
 const initState = {
-  accessToken: null
+  token: null,
+  user:null
 }
 
 export default ( state = initState, action ) => {
@@ -11,7 +12,8 @@ export default ( state = initState, action ) => {
     case actions.LOGIN_SUCCESS:
       return {
         ...state,
-        accessToken: action.accessToken
+        token: action.token,
+        user: action.user
       }
     default:
       return state

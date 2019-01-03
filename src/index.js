@@ -20,8 +20,8 @@ ReactDOM.render(
 			<Switch>
 				<Route exact path={'/'} component={App} />
 				<Route exact path={'/drag'} component={DragDropExample} />
-				<Route exact path={'/signin'} component={Signin} />
-				<Route exact path={'/signup'} component={Signup} />
+				<Route exact path={'/login'} component={Signin} />
+				<Route exact path={'/register'} component={Signup} />
 			</Switch>
 		</Router>
 	</Provider>,

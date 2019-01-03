@@ -8,7 +8,7 @@ import { API_URL } from '../../settings/server_url';
 
 const login = (data) =>
   fetch(`${API_URL}/users/login`, {
-    method: 'GET',
+    method: 'POST',
     body: JSON.stringify(data),
     headers: { 
       'content-type': 'application/x-www-form-urlencoded'
@@ -16,25 +16,25 @@ const login = (data) =>
   }).then(response => response.json())
     .catch( error => ({ error }) )
 
-
 export function* loginRequest() {
   yield takeEvery(actions.LOGIN_REQUEST, function*(action) {
-    const response = yield call(login)
-    console.log("debugs", response)
-
-    // if(Response.status === "success" ){
-    // } else {
-    //   yield put({ type: actions.LOGIN_ERROR })
-    //   Notification('error', `Error al iniciar sesión. ${Response.message}`)
-    // }
+    console.log(action.payload)
+    const response = yield call(login, action.payload)
+    console.log(response)
+    if(response.status === "success" ){
+      yield put()
+    } 
+    else {
+      Notification('error', `Error al iniciar sesión. ${Response.message}`)
+    }
   })
 }
 
-// export function* loginSuccess() {
-//   yield takeEvery(actions.LOGIN_SUCCESS, function*({ accessToken, profile }) {
-//     yield localStorage.setItem('user', JSON.stringify({ accessToken, profile }))
-//   })
-// }
+export function* loginSuccess() {
+  yield takeEvery(actions.LOGIN_SUCCESS, function*({ token, user }) {
+    yield localStorage.setItem('user', JSON.stringify({ token, user }))
+  })
+}
 
 // export function* logout() {
 //   yield takeEvery(actions.LOGOUT, function*() {

@@ -1,124 +1,166 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
-	Container,
-	Col,
-	Row,
-	Collapse,
-	Navbar,
-	NavbarToggler,
-	NavbarBrand,
-	Nav,
-	UncontrolledDropdown,
-	DropdownToggle,
-	DropdownMenu,
-	DropdownItem
-} from 'reactstrap';
+  Container,
+  Col,
+  Row,
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from "reactstrap";
 
-import './App.css';
-import Chart from './data';
-import SensorCard from './sensor-card';
+import "./App.css";
+import Chart from "./data";
+import SensorCard from "./sensor-card";
 
-import { connect } from 'react-redux';
-import Actions from '../redux/Data/actions';
+import { connect } from "react-redux";
+import Actions from "../redux/Data/actions";
 
 const { getDeviceList } = Actions;
 
 class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			deviceList: [],
-			isOpen: false
-		};
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      deviceList: [],
+      isOpen: false,
+      cuadrante1:null,
+      cuadrante2:null,
+      cuadrante3:null,
+      cuadrante4:null
+    };
+  }
 
-	componentDidMount() {
-		const { getDeviceList } = this.props;
-		getDeviceList();
-	}
+  componentDidMount() {
+    const { getDeviceList } = this.props;
+    getDeviceList();
+  }
 
-	componentWillReceiveProps(props) {
-		if (props.deviceList && props.deviceList.length > 0) {
-			this.setState({
-				deviceList: props.deviceList
-			});
-		}
-	}
+  componentWillReceiveProps(props) {
+    if (props.deviceList && props.deviceList.length > 0) {
+      this.setState({
+        deviceList: props.deviceList
+      });
+    }
+  }
 
-	_hanldeOpen = () => {
-		this.setState({
-			isOpen: !this.state.isOpen
-		});
-	};
+  _hanldeOpen = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
 
-	render() {
-		const { deviceList } = this.state;
-		const deviceListTest = [
-			{ deviceName: 'sensor 1', deviceOwner: 'asdasdas', deviceProvider: 'asdasdsa', deviceType: 'asdasdsa' },
-			{ deviceName: 'sensor 2', deviceOwner: 'asdasdas', deviceProvider: 'asdasdsa', deviceType: 'asdasdsa' },
-			{ deviceName: 'sensor 3', deviceOwner: 'asdasdas', deviceProvider: 'asdasdsa', deviceType: 'asdasdsa' },
-			{ deviceName: 'sensor 4', deviceOwner: 'asdasdas', deviceProvider: 'asdasdsa', deviceType: 'asdasdsa' }
-		];
-		return (
-			<div>
-				<Navbar color="light" light expand="md">
-					<NavbarBrand href="/">Sensores</NavbarBrand>
-					<NavbarToggler onClick={this._hanldeOpen} />
-					<Collapse isOpen={this.state.isOpen} navbar>
-						<Nav className="ml-auto" navbar>
-							<UncontrolledDropdown nav inNavbar>
-								<DropdownToggle nav caret>
-									Opciones
-								</DropdownToggle>
-								<DropdownMenu right>
-									<DropdownItem>Sign out</DropdownItem>
-								</DropdownMenu>
-							</UncontrolledDropdown>
-						</Nav>
-					</Collapse>
-				</Navbar>
-				<br />
+  onDragStart = (ev, device) => {
+    ev.dataTransfer.setData("device", JSON.stringify(device));
+  };
 
-				<Container style={{ margin: 0 }}>
-					<Row>
-						<Col md="4">
-							<div className="app">
-								<div className="scroller">
-									{deviceListTest.map((device, index) => <SensorCard key={index} device={device} />)}
-								</div>
-							</div>
-						</Col>
-						<Col md="8">
-							<Row>
-								<Col md="6">
-									<div className="chart-content" />
-								</Col>
-								<Col md="6">
-									<div className="chart-content" />
-								</Col>
-							</Row>
-							<Row>
-								<Col md="6">
-									<div className="chart-content" />
-								</Col>
-								<Col md="6">
-									<div className="chart-content" />
-								</Col>
-							</Row>
-						</Col>
-					</Row>
-				</Container>
-			</div>
-		);
-	}
+  onDragOver = e => {
+    e.preventDefault();
+  };
+
+  onDrop = (e, cuadrante) => {
+    let device = e.dataTransfer.getData("device");
+    this.setState({ 
+      [cuadrante]:JSON.parse(device)
+    });
+  };
+
+  render() {
+    const { deviceList } = this.state;
+
+    return (
+      <div>
+        <Navbar color="light" light expand="md">
+          <NavbarBrand href="/">Sensores</NavbarBrand>
+          <NavbarToggler onClick={this._hanldeOpen} />
+          <Collapse isOpen={this.state.isOpen} navbar>
+            <Nav className="ml-auto" navbar>
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  Opciones
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>Sign out</DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </Nav>
+          </Collapse>
+        </Navbar>
+        <br />
+
+        <Container style={{ margin: 0, maxWidth: "100%" }}>
+          <Row>
+            <Col md="3">
+              <div className="app">
+                <div className="scroller">
+                  {deviceList.map((device, index) => (
+                    <div
+                      key={index}
+                      draggable={true}
+                      onDragStart={e => this.onDragStart(e, device)}
+                    >
+                      <SensorCard device={device} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Col>
+            <Col md="9">
+              <Row>
+                <Col md="6">
+                  <div
+                    onDragOver={e => this.onDragOver(e)}
+                    onDrop={e => this.onDrop(e, "cuadrante1")}
+                    className="chart-content"
+                  >{this.state.cuadrante1 ?<Chart device={this.state.cuadrante1}/>:null}</div>
+                </Col>
+                <Col md="6">
+                  <div
+                    onDragOver={e => this.onDragOver(e)}
+                    onDrop={e => this.onDrop(e, "cuadrante2")}
+                    className="chart-content"
+                  >{this.state.cuadrante2 ?<Chart device={this.state.cuadrante2}/>:null}</div>
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col md="6">
+                <div
+                    onDragOver={e => this.onDragOver(e)}
+                    onDrop={e => this.onDrop(e, "cuadrante3")}
+                    className="chart-content"
+                  >{this.state.cuadrante3 ?<Chart device={this.state.cuadrante3}/>:null}</div>
+                </Col>
+                <Col md="6">
+                <div
+                    onDragOver={e => this.onDragOver(e)}
+                    onDrop={e => this.onDrop(e, "cuadrante4")}
+                    className="chart-content"
+                  >{this.state.cuadrante4 ?<Chart device={this.state.cuadrante4}/>:null}</div>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    );
+  }
 }
 
-const mapStateToProps = (state) => ({
-	deviceList: state.Data.deviceList
+const mapStateToProps = state => ({
+  deviceList: state.Data.deviceList
 });
 
 // const mapDispatchToProps = (dispatch) => ({
 // getDeviceList
 // });
 
-export default connect(mapStateToProps, { getDeviceList })(App);
+export default connect(
+  mapStateToProps,
+  { getDeviceList }
+)(App);
