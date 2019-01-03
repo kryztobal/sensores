@@ -6,6 +6,7 @@ const initState = {
 }
 
 export default ( state = initState, action ) => {
+  console.log("action", action)
   switch (action.type) {
     case actions.LOGOUT:
       return initState

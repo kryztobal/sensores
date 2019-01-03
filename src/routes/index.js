@@ -1,52 +1,50 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
-
+import React from "react";
+import { connect } from "react-redux";
+import { Route, Redirect } from "react-router-dom";
+import Signin from '../components/signin'
+import Signup from '../components/signup'
 import App from '../components/App'
-import Login from '../components/signin'
 
-// import asyncComponent from './helpers/AsyncFunc';
+const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      isLoggedIn ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: { from: props.location }
+          }}
+        />
+      )
+    }
+  />
+);
 
-// const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
-//   <Route
-//     {...rest}
-//     render={props =>
-//       isLoggedIn ? (
-//         <Component {...props} />
-//       ) : (
-//         <Redirect
-//           to={{
-//             pathname: '/login',
-//             state: { from: props.location }
-//           }}
-//         />
-//       )
-//     }
-//   />
-// );
-const PublicRoutes = ({ history }) => {
+const PublicRoutes = ({ history, isLoggedIn }) => {
   return (
-    <ConnectedRouter history={history}>
       <div>
         <Route
           exact
-          path={'/'}
-          component={App}
+          path={"/register"}
+          component={Signup}
         />
         <Route
           exact
-          path={'/login'}
-          component= {Login}
+          path={"/login"}
+          component={Signin}
         />
-        {/*<RestrictedRoute
-          path="/driver"
+        <RestrictedRoute
+          path="/"
           component={App}
           isLoggedIn={isLoggedIn}
-        />*/}
+        />
       </div>
-    </ConnectedRouter>
   );
 };
 
-export default PublicRoutes
+export default connect(state => ({
+  isLoggedIn: state.Signin.token !== null
+}))(PublicRoutes);

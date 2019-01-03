@@ -1,14 +1,23 @@
 import actions from "./actions";
-import { history } from "../store";
+import history from "../../history";
 import { all, takeEvery, put, fork, call } from "redux-saga/effects";
 import { API_URL } from "../../settings/server_url";
 import axios from "axios";
 import Notification from '../../components/Notification'
+import URLSearchParams from "url-search-params";
+
+const formatData = payload => {
+  const searchParams = new URLSearchParams();
+  for (const prop in payload) {
+    searchParams.set(prop, payload[prop]);
+  }
+  return searchParams;
+};
 
 const signup = data =>
   fetch(`${API_URL}/users/create`, {
     method: "PUT",
-    body: JSON.stringify(data),
+    body: formatData(data),
     headers: {
       "content-type": "application/x-www-form-urlencoded"
     }
@@ -18,33 +27,22 @@ const signup = data =>
 
 export function* signupRequest() {
   yield takeEvery(actions.SIGNUP_REQUEST, function*(action) {
-    console.log("sig", action);
  if (action.payload.password != action.payload["confirm_password"]) {
       yield put({ type: actions.SIGNUP_ERROR });
-      Notification('error', `Las contraseñas no coinciden`)
+      // Notification('error', `Las contraseñas no coinciden`)
+      console.log("no coinciden las contraseñas")
     } else {
-
-      const response = yield call(signup, { details: action.payload });
-      console.log("response", response);
+      const {email, user, password} = action.payload
+      const response = yield call(signup, {email, user, password} );
       
-      // if (Response.status === "success") {
-      //   yield put({
-      //     type: actions.SIGNUP_SUCCESS,
-      //     payload: Response
-      //   });
-      // } else {
-      //   yield put({ type: actions.SIGNUP_ERROR });
-      //   Notification(
-      //     "error",
-      //     `Ha ocurrido un error al registrarlo. ${Response.message} ${
-      //       Response.data.code == "REQ_PARAM"
-      //         ? nameFieldSignup[Response.data.meta.param]
-      //         : Response.data.code == "INV_PARAM"
-      //         ? nameFieldSignup[Response.data.meta.param]
-      //         : ""
-      //     }`
-      //   );
-      // }
+      if (response.status == "success") {
+        console.log("Registro exitoso")
+        // Notification('info', `Registro existoso`)
+        history.push('/login')
+      } else {
+        console.log(`Ha habido un error al registrarse ${response.message}`)
+        // Notification('error', `Ha habido un error al registrarse ${response.message}`)
+      }
     }
   });
 }
