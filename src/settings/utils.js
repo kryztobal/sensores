@@ -1,4 +1,3 @@
-import cookie from "react-cookies";
 
 export const getToken = () => {
   let token = localStorage.getItem("token");

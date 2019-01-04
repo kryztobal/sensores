@@ -10,9 +10,7 @@ import {
   removeUser,
   removeToken
 } from "../../settings/utils";
-import Notification from "../../components/Notification";
 import URLSearchParams from "url-search-params";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 const formatData = payload => {
   const searchParams = new URLSearchParams();
