@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Loader from "react-loader-spinner";
-import { Card, CardTitle, CardText, Col, Row } from "reactstrap";
+import { Row } from "reactstrap";
 import { API_URL } from "../../settings/server_url";
 import {
   LineChart,
@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import moment from "moment";
 import "./index.css";
+
 
 const GraphMonnit = props => {
   const data = [];
@@ -93,51 +94,6 @@ class Chart extends Component {
       loaded: false,
       device:null
     };
-  }
-
-  componentDidMount(){
-    console.log(this.props.device)
-    if(this.props.device){
-      setInterval(()=>{
-        
-        console.log("asdasda")
-      }, 1000)
-    }
-  }
-
-  componentWillReceiveProps(props) {
-    if (props.device) {
-      fetch(`${API_URL}/devices/${props.device.deviceId}/10`, {
-        method: "GET",
-        headers: {
-          "Access-Control-Allow-Headers": "*",
-          token:
-            "e178bec211fe4851e7913d8a1b367baf06a9758183241c2c3b56438a8b37c1ef82c30ff49dc44523ad8fbb19acf4eb0d218cae6bba8a96697237d64800ebb7ab",
-          user: "cmunoz"
-        }
-      })
-        .then(response => response.json())
-        .then(content => {
-          if (content.status === "success") {
-            this.setState({
-              lectures: content.data.Items,
-              count: content.data.Count,
-              scannedCount: content.data.ScannedCount,
-              loaded: true,
-              deviceId: props.device.deviceId
-            });
-          } else {
-            this.setState({
-              loaded: false
-            });
-          }
-        });
-    }
-  }
-
-  componentDidMount() {
-    if (this.state.deviceId) {
-    }
   }
 
   render() {

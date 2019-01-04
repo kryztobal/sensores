@@ -7,10 +7,14 @@ import { Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
 
+import * as utils from './settings/utils'
+
+const token = utils.getToken()
+
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <PublicRoutes />
+      <PublicRoutes token={token}/>
     </Router>
   </Provider>,
   document.getElementById("root")

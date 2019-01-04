@@ -20,8 +20,10 @@ import SensorCard from "./sensor-card";
 
 import { connect } from "react-redux";
 import Actions from "../redux/Data/actions";
+import authActions from "../redux/Signin/actions";
 
 const { getDeviceList } = Actions;
+const { logout } = authActions;
 
 class App extends Component {
   constructor(props) {
@@ -85,7 +87,7 @@ class App extends Component {
                   Opciones
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem>Sign out</DropdownItem>
+                  <DropdownItem >Sign out</DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>
@@ -162,5 +164,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getDeviceList }
+  { getDeviceList, logout }
 )(App);

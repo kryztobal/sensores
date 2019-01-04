@@ -1,8 +1,6 @@
 import actions from "./actions";
-import history from "../../history";
 import { all, takeEvery, put, fork, call } from "redux-saga/effects";
 import { API_URL } from "../../settings/server_url";
-import axios from "axios";
 import Notification from '../../components/Notification'
 import URLSearchParams from "url-search-params";
 
@@ -38,7 +36,8 @@ export function* signupRequest() {
       if (response.status == "success") {
         console.log("Registro exitoso")
         // Notification('info', `Registro existoso`)
-        history.push('/login')
+        // history.push('/login')
+        window.location.href = "/login";
       } else {
         console.log(`Ha habido un error al registrarse ${response.message}`)
         // Notification('error', `Ha habido un error al registrarse ${response.message}`)
@@ -47,24 +46,6 @@ export function* signupRequest() {
   });
 }
 
-export function* signupSuccess() {
-  yield takeEvery(actions.SIGNUP_SUCCESS, function*({ payload }) {
-    //const { data } = payload
-    //const { details } = data
-    // yield put({
-    //   type: "LOGIN_SUCCESS",
-    //   accessToken: data.jwtToken,
-    //   profile: {
-    //     email: details.email,
-    //     avatar: details.profileImage,
-    //     fullName: `${details.firstName} ${details.lastName}`
-    //   }
-    // })
-    //yield put(history.push('/login'))
-    //yield Notification('info','Registro exitoso.')
-  });
-}
-
 export default function* rootSaga() {
-  yield all([fork(signupRequest), fork(signupSuccess)]);
+  yield all([fork(signupRequest)]);
 }

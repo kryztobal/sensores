@@ -1,27 +1,27 @@
 import cookie from "react-cookies";
 
-export const getTokenCookie = () => {
-  let token = cookie.load("token");
+export const getToken = () => {
+  let token = localStorage.getItem("token");
   return token ? token : null;
 };
 
-export const setTokenCookie = token => {
-  cookie.save("token", token, { path: "/" });
+export const setToken = token => {
+  localStorage.setItem("token", token);
 };
 
-export const getUserCookie = () => {
-  let user = cookie.load("user");
+export const getUser = () => {
+  let user = localStorage.getItem("user");
   return user ? user : null;
 };
 
-export const setUserCookie = user => {
-  cookie.save("user", user, { path: "/" });
+export const setUser = user => {
+  localStorage.setItem("user", user);
 };
 
-export const removeTokenCookie = () => {
-  cookie.remove("token", { path: "/" });
+export const removeToken = () => {
+  localStorage.removeItem("token");
 };
 
-export const removeUserCookie = () => {
-  cookie.remove("user", { path: "/" });
+export const removeUser = () => {
+  localStorage.removeItem("user");
 };

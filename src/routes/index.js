@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 import Signin from '../components/signin'
 import Signup from '../components/signup'
@@ -23,7 +22,7 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
   />
 );
 
-const PublicRoutes = ({ history, isLoggedIn }) => {
+const PublicRoutes = ({ token }) => {
   return (
       <div>
         <Route
@@ -36,15 +35,14 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
           path={"/login"}
           component={Signin}
         />
+
         <RestrictedRoute
           path="/"
           component={App}
-          isLoggedIn={isLoggedIn}
+          isLoggedIn={false}
         />
       </div>
   );
 };
 
-export default connect(state => ({
-  isLoggedIn: state.Signin.token !== null
-}))(PublicRoutes);
+export default PublicRoutes;

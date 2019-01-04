@@ -3,10 +3,12 @@ import history from "../../history";
 import { all, takeEvery, put, fork, call } from "redux-saga/effects";
 import { API_URL } from "../../settings/server_url";
 import {
-  setTokenCookie,
-  setUserCookie,
-  removeUserCookie,
-  removeTokenCookie
+  setToken,
+  setUser,
+  getToken,
+  getUser,
+  removeUser,
+  removeToken
 } from "../../settings/utils";
 import Notification from "../../components/Notification";
 import URLSearchParams from "url-search-params";
@@ -39,9 +41,9 @@ export function* loginRequest() {
         token: response.token,
         user: response.user
       });
-      yield setTokenCookie(response.token);
-      yield setUserCookie(response.user);
-      yield history.push("/");
+      yield setToken(response.token);
+      yield setUser(response.user);
+      window.location.href = "/";
     } else {
       Notification("error", `Error al iniciar sesión. ${response.message}`);
     }
@@ -50,9 +52,9 @@ export function* loginRequest() {
 
 export function* logout() {
   yield takeEvery(actions.LOGOUT, function*() {
-    yield removeUserCookie();
-    yield removeTokenCookie();
-    yield put(history.push("/login"));
+    yield removeUser();
+    yield removeToken();
+    window.location.href = "/login";
   });
 }
 
