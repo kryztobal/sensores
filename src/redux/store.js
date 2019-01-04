@@ -4,6 +4,7 @@ import allReducers from './reducers';
 import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas'
+import authActions from '../redux/Signin/actions'
 
 const sagaMiddleware = createSagaMiddleware();
 

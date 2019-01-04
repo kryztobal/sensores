@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: navy;
+  background-color: #6f8dff;
   background-size: cover;
   background-position: center center;
 
@@ -73,9 +73,10 @@ const Wrapper = styled.div`
 
   .btn-secondary:hover {
     color: #fff;
-    background-color: navy;
-    border-color: navy;
+    background-color: #6f8dff;
+    border-color: #6f8dff;
   }
+
   @media (max-width: 768.98px) {
      .btn-rounded {
       margin-top: 12px;

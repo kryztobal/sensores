@@ -1,8 +1,7 @@
 import actions from './actions';
-// import { history } from '../store';
 import { all, takeEvery, put, fork, call } from 'redux-saga/effects';
 import { API_URL } from '../../settings/server_url';
-import Notification from '../../components/Notification'
+import * as utils from '../../settings/utils'
 
 const getDevicesList = (user) =>
 	fetch(`${API_URL}/devices`, {
@@ -18,17 +17,13 @@ const getDevicesList = (user) =>
 
 export function* getDevicesListRequest() {
 	yield takeEvery(actions.GET_DEVICE_LIST, function*(action) {
-		const user = 'crojo';
+		const user = utils.getUser();		
     const response = yield call(getDevicesList, user);
 		if(response.status === "success" ){
       yield put({ type: actions.GET_DEVICE_LIST_SUCCESS, payload:response.data })
 		} 
-		else {
-		  Notification('error', `Error al cargar la data.`)
-		}
 	});
 }
-
 
 export default function* rootSaga() {
 	yield all([

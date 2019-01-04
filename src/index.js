@@ -6,9 +6,8 @@ import store from "./redux/store";
 import { Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
-
 import * as utils from './settings/utils'
-
+import authActions from './redux/Signin/actions'
 const token = utils.getToken()
 
 ReactDOM.render(
@@ -19,5 +18,7 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
+
+store.dispatch(authActions.authCheck())
 
 serviceWorker.unregister();

@@ -2,7 +2,8 @@ import actions from './actions';
 
 const initState = {
   token: null,
-  user:null
+  user:null,
+  error:""
 }
 
 export default ( state = initState, action ) => {
@@ -14,6 +15,11 @@ export default ( state = initState, action ) => {
         ...state,
         token: action.token,
         user: action.user
+      }
+      case actions.LOGIN_ERROR:
+      return {
+        ...state,
+        error: action.error
       }
     default:
       return state

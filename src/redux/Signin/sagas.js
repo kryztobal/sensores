@@ -12,6 +12,7 @@ import {
 } from "../../settings/utils";
 import Notification from "../../components/Notification";
 import URLSearchParams from "url-search-params";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 const formatData = payload => {
   const searchParams = new URLSearchParams();
@@ -41,11 +42,11 @@ export function* loginRequest() {
         token: response.token,
         user: response.user
       });
-      yield setToken(response.token);
-      yield setUser(response.user);
-      window.location.href = "/";
     } else {
-      Notification("error", `Error al iniciar sesión. ${response.message}`);
+      yield put({
+        type: actions.LOGIN_ERROR,
+        error: `Error al iniciar sesión. ${response.message}`
+      });
     }
   });
 }
@@ -54,10 +55,32 @@ export function* logout() {
   yield takeEvery(actions.LOGOUT, function*() {
     yield removeUser();
     yield removeToken();
-    window.location.href = "/login";
+    yield history.push('/login')
+  });
+}
+
+export function* loginSuccess() {
+  yield takeEvery(actions.LOGIN_SUCCESS, function*(action) {
+    yield setToken(action.token);
+    yield setUser(action.user);
+    yield history.push('/')
+  });
+}
+
+export function* authCheck() {
+  yield takeEvery(actions.AUTH_CHECK, function*() {
+    const user = getUser()
+    const token = getToken()
+    if(user){
+      yield put({
+        type: actions.LOGIN_SUCCESS,
+        token: token,
+        user: user
+      });
+    }
   });
 }
 
 export default function* rootSaga() {
-  yield all([fork(logout), fork(loginRequest)]);
+  yield all([fork(logout), fork(loginSuccess), fork(loginRequest), fork(authCheck)]);
 }
